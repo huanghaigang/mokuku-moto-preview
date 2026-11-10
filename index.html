@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>MOKUKU MOTO 官网方案预览</title>
+<style>
+  :root {
+    --bg: #f5f5f3;
+    --card: #ffffff;
+    --text: #141414;
+    --muted: #6b6b68;
+    --line: #e4e4e0;
+    --accent: #141414;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111211;
+      --card: #1b1c1b;
+      --text: #f2f2ee;
+      --muted: #a0a09a;
+      --line: #2c2d2b;
+      --accent: #f2f2ee;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 56px 24px 72px; }
+  .eyebrow { font-size: 13px; letter-spacing: .08em; color: var(--muted); margin: 0 0 10px; }
+  h1 { font-size: clamp(28px, 4vw, 40px); line-height: 1.2; margin: 0 0 14px; font-weight: 650; letter-spacing: -.01em; }
+  .lead { color: var(--muted); margin: 0 0 40px; max-width: 640px; font-size: 16px; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .card {
+    display: flex; flex-direction: column;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    color: inherit; text-decoration: none;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,.10); }
+  .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .shot { aspect-ratio: 16 / 10; background: #ddd center / cover no-repeat; border-bottom: 1px solid var(--line); }
+  .body { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .tag { font-size: 13px; color: var(--muted); }
+  h2 { font-size: 20px; margin: 0; font-weight: 620; }
+  .desc { color: var(--muted); font-size: 14px; margin: 2px 0 14px; flex: 1; }
+  .go { font-size: 15px; font-weight: 600; }
+  .note { margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+  .note p { margin: 0 0 6px; }
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; max-width: 560px; }
+    .wrap { padding: 36px 16px 56px; }
+  }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <p class="eyebrow">MOKUKU MOTO · 内部预览</p>
+    <h1>官网设计方案预览</h1>
+    <p class="lead">三个方向的官网网页，点开即可浏览。电脑和手机都能看，建议每个都从头滑到尾，并点开里面的功能详情和「Join Early Access」问卷。</p>
+
+    <div class="grid">
+      <a class="card" href="./v2/">
+        <div class="shot" style="background-image:url('./previews/a.jpg')" role="img" aria-label="方案 A 首屏截图"></div>
+        <div class="body">
+          <span class="tag">方案 A</span>
+          <h2>明亮山路</h2>
+          <p class="desc">白天雪山公路满屏大图，浅色干净，强调「精准感知、安心导航」。</p>
+          <span class="go">打开网页 →</span>
+        </div>
+      </a>
+
+      <a class="card" href="./atelier/">
+        <div class="shot" style="background-image:url('./previews/b.jpg')" role="img" aria-label="方案 B 首屏截图"></div>
+        <div class="body">
+          <span class="tag">方案 B</span>
+          <h2>深色精工</h2>
+          <p class="desc">深色背景配大号窄体字，右侧产品特写，偏硬核、器物感。</p>
+          <span class="go">打开网页 →</span>
+        </div>
+      </a>
+
+      <a class="card" href="./open-road/">
+        <div class="shot" style="background-image:url('./previews/c.jpg')" role="img" aria-label="方案 C 首屏截图"></div>
+        <div class="body">
+          <span class="tag">方案 C</span>
+          <h2>海岸公路</h2>
+          <p class="desc">黄昏海岸公路场景大图，居中标题，偏生活方式和旅程感。</p>
+          <span class="go">打开网页 →</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="note">
+      <p>网页图片较多，第一次打开可能要等几秒。</p>
+      <p>问卷只是演示交互，提交后不会真的保存数据。</p>
+    </div>
+  </main>
+</body>
+</html>

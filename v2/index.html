@@ -1,0 +1,1390 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>MOKUKU MOTO V2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="MOKUKU MOTO: precision sensing and confident navigation for motorcycles.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500&family=Inter+Tight:wght@500;600&display=swap">
+<style>
+/* Layout: one ride, top to bottom. A tight display face over a quiet sans,
+   square-cut photographs, pill controls, titles left and leads right.
+   Same palette as before: near-black, white, two greys, no accent. */
+:root {
+  color-scheme: dark;
+  --font: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --display: 'Inter Tight', 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --fs-hero: clamp(56px, 9.6vw, 152px);
+  --fs-h2: clamp(34px, 4.4vw, 64px);
+  --fs-h3: clamp(24px, 2.4vw, 36px);
+  --fs-stat: clamp(40px, 4.6vw, 68px);
+  --fs-lead: clamp(17px, 1.4vw, 20px);
+  --fs-body: 16px;
+  --fs-ui: 14px;
+  --fs-fine: 12px;
+
+  --white: #ffffff;
+  --soft: #f4f4f2;
+  --paper: #f1f0f3;
+  --ink: #16171a;
+  --ink-2: #5c5f66;
+  --line: #e3e3e0;
+  --dusk: #121315;
+  --night: #0b0b0c;
+  --night-soft: #1a1b1d;
+  --night-ink: #f5f5f3;
+  --night-ink-2: #a3a5a8;
+  --night-line: #2a2b2e;
+
+  --max: 1344px;
+  --g: clamp(16px, 3.4vw, 48px);
+  --gl: max(var(--g), env(safe-area-inset-left, 0px));
+  --gr: max(var(--g), env(safe-area-inset-right, 0px));
+  --top: env(safe-area-inset-top, 0px);
+  --ease: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --dur: 250ms;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.07 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  --bg: var(--white);
+  --fg: var(--ink);
+  --fg-2: var(--ink-2);
+  --rule: var(--line);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--night); color: var(--fg);
+  font-family: var(--font); font-size: var(--fs-body); line-height: 1.55;
+  font-optical-sizing: auto; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+img { display: block; max-width: 100%; }
+h1, h2, h3, h4, p, dl, dd, figure, ol, ul { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:is(a, button, input, select, summary):focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+
+/* ---------- bands ---------- */
+.light, .soft, .dusk, .dark { background-color: var(--bg); color: var(--fg); }
+.light { --bg: var(--white); color-scheme: light; }
+.soft { --bg: var(--soft); color-scheme: light; }
+.dusk { --bg: var(--dusk); --fg: var(--night-ink); --fg-2: var(--night-ink-2); --rule: var(--night-line); background-image: var(--grain); }
+.dark { --bg: var(--night); --fg: var(--night-ink); --fg-2: var(--night-ink-2); --rule: var(--night-line); background-image: var(--grain); }
+
+.wrap { max-width: calc(var(--max) + 96px); margin-left: auto; margin-right: auto; padding-left: var(--gl); padding-right: var(--gr); }
+.section { padding-block: clamp(96px, 11vw, 168px); }
+
+/* ---------- type ---------- */
+.h2 { font: 600 var(--fs-h2) / 1.02 var(--display); letter-spacing: -0.035em; text-wrap: balance; }
+.h3 { font: 600 var(--fs-h3) / 1.08 var(--display); letter-spacing: -0.025em; text-wrap: balance; }
+.lead { font-size: var(--fs-lead); line-height: 1.5; color: var(--fg-2); max-width: 40ch; }
+.text { color: var(--fg-2); max-width: 44ch; }
+.fine { font-size: var(--fs-fine); color: var(--fg-2); line-height: 1.5; }
+.note { font-size: 0.6em; line-height: 0; margin-left: 2px; vertical-align: super; }
+.note a { color: var(--fg-2); text-decoration: none; padding: 0 2px; }
+.note a:hover { color: var(--fg); }
+.head {
+  display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(24px, 4vw, 72px); align-items: end;
+  margin-bottom: clamp(56px, 7vw, 112px);
+}
+.head .lead { justify-self: end; }
+
+/* ---------- buttons ---------- */
+.pill {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 46px; padding: 0 26px; border-radius: 999px; border: 0;
+  font: 500 var(--fs-ui) / 1 var(--font); text-decoration: none; cursor: pointer; white-space: nowrap;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.pill-solid { background: var(--fg); color: var(--bg); }
+.dark .pill-solid, .dusk .pill-solid { background: var(--night-ink); color: var(--ink); }
+.pill-solid:hover { background: #ffffff; color: var(--ink); }
+.light .pill-solid:hover, .soft .pill-solid:hover { background: #000; color: #fff; }
+.pill-line { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1px var(--rule); }
+.pill-line:hover { box-shadow: inset 0 0 0 1px var(--fg); }
+.pill-small { height: 34px; padding: 0 16px; font-size: 13px; }
+.link { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; text-decoration: none; }
+.link svg { transition: transform var(--dur) var(--ease); }
+.link:hover svg { transform: translateX(3px); }
+
+.media { position: relative; overflow: hidden; background: var(--night-soft); }
+.light .media, .soft .media { background: var(--soft); }
+.media > img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- header with the route ---------- */
+body::before { content: ''; position: fixed; inset: 0 0 auto; height: var(--top); z-index: 60; background: var(--night); }
+.header {
+  position: fixed; inset: 0 0 auto; z-index: 50;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 24px;
+  height: calc(60px + var(--top)); padding-top: var(--top); padding-left: var(--gl); padding-right: var(--gr);
+  color: var(--night-ink); --hdr: var(--night);
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.header[data-scrolled] { background: rgba(18, 19, 21, 0.66); -webkit-backdrop-filter: saturate(160%) blur(24px); backdrop-filter: saturate(160%) blur(24px); --hdr: #1b1c1f; }
+.header[data-tone='light'] { color: var(--ink); background: rgba(255, 255, 255, 0.78); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06); --hdr: #f7f7f6; }
+.header:not([data-scrolled]) { background: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.wordmark { font: 600 19px / 1 var(--display); letter-spacing: -0.02em; text-decoration: none; white-space: nowrap; justify-self: start; }
+.header-cta { justify-self: end; }
+.header .pill-solid { background: var(--night-ink); color: var(--ink); }
+.header[data-tone='light'] .pill-solid { background: var(--ink); color: #fff; }
+.route { position: relative; width: min(46vw, 600px); height: 60px; opacity: 0; pointer-events: none; transition: opacity var(--dur) var(--ease); }
+.header[data-pinned] .route { opacity: 1; pointer-events: auto; }
+.route-track, .route-fill { position: absolute; left: 0; right: 0; top: 22px; height: 1px; background: currentColor; }
+.route-track { opacity: 0.22; }
+.route-fill { transform-origin: left center; transform: scaleX(var(--fill, 0)); }
+.route-stop {
+  position: absolute; top: 0; height: 60px; padding: 18px 0 0; border: 0; background: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 7px; transform: translateX(-50%);
+  font-size: 11px; letter-spacing: 0.02em; white-space: nowrap;
+}
+.route-stop:first-of-type { transform: none; align-items: flex-start; }
+.route-stop:last-of-type { transform: translateX(-100%); align-items: flex-end; }
+.route-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--hdr); box-shadow: inset 0 0 0 1px currentColor; transition: background-color var(--dur) var(--ease); }
+.route-stop[data-passed] .route-dot { background: currentColor; }
+.route-label { opacity: 0.55; transition: opacity var(--dur) var(--ease); }
+.route-stop[aria-current] .route-label, .route-stop:hover .route-label { opacity: 1; }
+.header::after { content: ''; display: none; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: currentColor; transform-origin: left center; transform: scaleX(var(--fill, 0)); }
+
+/* ---------- hero: one full photograph, the device on the right third, the words in
+   the open sky on the left. Where the screen is too narrow or too tall for that
+   (phones, tablets upright), the words sit above a portrait photograph instead,
+   so the two never overlap. ---------- */
+.hero { position: relative; display: grid; align-items: center; min-height: max(640px, 100svh); }
+.hero-frame { position: absolute; inset: 0; }
+.hero-frame img { position: absolute; inset: 0; object-position: 70% 50%; }
+.hero-frame::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(244, 244, 242, 0.84) 0%, rgba(244, 244, 242, 0.58) 30%, rgba(244, 244, 242, 0) 52%), linear-gradient(180deg, rgba(244, 244, 242, 0.6) 0%, rgba(244, 244, 242, 0) 16%);
+}
+.hero-copy { position: relative; z-index: 1; width: min(44vw, 640px); padding: calc(60px + var(--top) + 32px) 0 56px var(--gl); box-sizing: content-box; }
+.hero-title { font: 600 clamp(40px, 4.8vw, 84px) / 0.95 var(--display); letter-spacing: -0.045em; white-space: nowrap; }
+.hero-line { margin-top: 18px; font-size: clamp(18px, 1.5vw, 22px); line-height: 1.4; max-width: 30ch; color: var(--fg-2); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.media > picture { display: block; width: 100%; height: 100%; }
+.media > picture > img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- navigation: steps on the left, the picture holds on the right ---------- */
+.steps { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 96px); }
+.steps-media { grid-column: 2; grid-row: 1; position: sticky; top: clamp(96px, calc(50vh - 17vw), 300px); align-self: start; aspect-ratio: 16 / 10; }
+.steps-media .media { position: absolute; inset: 0; opacity: 0; transition: opacity 600ms var(--ease); }
+.steps-media .media.is-on { opacity: 1; }
+.steps-list { grid-column: 1; grid-row: 1; }
+.step { min-height: 58vh; display: flex; flex-direction: column; justify-content: center; gap: 14px; padding-block: 32px; transition: opacity 400ms var(--ease); }
+.step:first-child { min-height: 46vh; justify-content: flex-start; padding-top: 0; }
+.step:last-child { min-height: 46vh; }
+.steps.is-live .step:not(.is-on) { opacity: 0.28; }
+.step-n { font-size: 13px; color: var(--fg-2); font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+.step .text { font-size: 17px; max-width: 36ch; }
+.step-m { display: none; aspect-ratio: 16 / 10; margin-bottom: 8px; }
+
+.roles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 48px); margin-top: clamp(96px, 10vw, 160px); }
+.role { border-top: 1px solid var(--fg); padding-top: 20px; display: grid; gap: 8px; align-content: start; }
+.role-k { font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-2); }
+.role h3 { font: 600 22px / 1.2 var(--display); letter-spacing: -0.015em; }
+.role p { color: var(--fg-2); font-size: 15px; max-width: 34ch; }
+.roles-note { margin-top: 24px; }
+
+/* ---------- statement ---------- */
+.statement { padding-top: clamp(140px, 16vw, 260px); padding-bottom: clamp(140px, 14vw, 220px); }
+.statement-text { font: 600 clamp(36px, 5.4vw, 88px) / 1.02 var(--display); letter-spacing: -0.04em; max-width: 16em; text-wrap: balance; }
+.statement-text span { display: block; color: var(--fg-2); }
+
+/* ---------- roads: the ride, stop by stop ---------- */
+.trip { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 4.5vw, 80px); }
+.trip-map { position: sticky; top: clamp(96px, calc(50vh - 15vw), 260px); align-self: start; z-index: 2; }
+.map-stage { position: relative; aspect-ratio: 2 / 1; background: #0f1012; border: 1px solid var(--night-line); }
+.map-stage canvas, .map-stage svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.r-casing, .r-dim, .r-done, .r-gap { fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.r-casing { stroke: #0f1012; stroke-width: 8; }
+.r-dim { stroke: rgba(245, 245, 243, 0.26); stroke-width: 1.6; }
+.r-done { stroke: var(--night-ink); stroke-width: 2.2; }
+.r-gap { stroke: #0f1012; stroke-width: 4; stroke-dasharray: 6 5; stroke-linecap: butt; }
+.pt circle { fill: #0f1012; stroke: rgba(245, 245, 243, 0.5); stroke-width: 1; vector-effect: non-scaling-stroke; transition: fill var(--dur) var(--ease); }
+.pt text { fill: var(--night-ink-2); font: 500 24px var(--font); font-variant-numeric: tabular-nums; }
+.pt.is-on circle { fill: var(--night-ink); stroke: var(--night-ink); }
+.pt.is-on text { fill: var(--night); }
+.pt { cursor: pointer; }
+.rider-halo { fill: rgba(245, 245, 243, 0.14); }
+.rider-dot { fill: #ffffff; }
+.map-status { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; margin-top: 16px; font-size: 13px; color: var(--fg-2); }
+.map-status strong { color: var(--fg); font-weight: 500; }
+.bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; margin-right: 8px; vertical-align: -1px; }
+.bars i { width: 3px; background: currentColor; opacity: 0.22; transition: opacity var(--dur) var(--ease); }
+.bars i:nth-child(1) { height: 4px; } .bars i:nth-child(2) { height: 7px; } .bars i:nth-child(3) { height: 10px; } .bars i:nth-child(4) { height: 12px; }
+.bars[data-level='1'] i:nth-child(-n+1), .bars[data-level='2'] i:nth-child(-n+2), .bars[data-level='3'] i:nth-child(-n+3), .bars[data-level='4'] i { opacity: 1; }
+.sig { display: inline-flex; align-items: center; color: var(--fg); }
+.trip-legend { margin-top: 28px; border-bottom: 1px solid var(--rule); }
+.trip-legend button {
+  display: flex; gap: 14px; width: 100%; padding: 12px 0; border: 0; border-top: 1px solid var(--rule); background: none;
+  text-align: left; font-size: 15px; color: var(--fg-2); cursor: pointer; transition: color var(--dur) var(--ease);
+}
+.trip-legend button b { font-weight: 400; font-variant-numeric: tabular-nums; width: 1.2em; }
+.trip-legend button[aria-current], .trip-legend button:hover { color: var(--fg); }
+.stop { min-height: 76vh; display: flex; flex-direction: column; justify-content: center; gap: 14px; padding-block: 40px; transition: opacity 400ms var(--ease); }
+.trip.is-live .stop:not(.is-on) { opacity: 0.3; }
+.stop .media { aspect-ratio: 16 / 10; margin-bottom: 10px; }
+.stop-k { font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-2); }
+.stop .text { font-size: 17px; }
+
+/* ---------- ride data ---------- */
+.ride { position: relative; }
+.ride-photo { aspect-ratio: 21 / 9; }
+.ride-photo > img { object-position: 20% 62%; }
+.ride-panel { margin-top: clamp(40px, 4.5vw, 72px); max-width: 54%; min-height: clamp(280px, 25vw, 380px); }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.tab { height: 40px; padding: 0 18px; border-radius: 999px; border: 0; background: transparent; box-shadow: inset 0 0 0 1px var(--rule); font-size: 14px; font-weight: 500; color: var(--fg-2); cursor: pointer; transition: all var(--dur) var(--ease); }
+.tab:hover { color: var(--fg); box-shadow: inset 0 0 0 1px var(--fg); }
+.tab[aria-selected='true'] { background: var(--fg); color: var(--bg); box-shadow: none; }
+.tab-copy { margin-top: 28px; }
+.tab-copy p { font-size: clamp(20px, 1.9vw, 28px); line-height: 1.3; letter-spacing: -0.01em; max-width: 26ch; color: var(--fg); }
+.phone {
+  position: absolute; right: calc(var(--gr) + 5%); top: clamp(150px, 17vw, 250px);
+  width: clamp(232px, 20vw, 292px); aspect-ratio: 9 / 19.5; padding: 10px; border-radius: 46px;
+  background: #0d0d0e; box-shadow: 0 40px 90px rgba(0, 0, 0, 0.32), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+.phone-screen { position: relative; height: 100%; border-radius: 36px; overflow: hidden; background: var(--night); color: var(--night-ink); font-size: 12px; line-height: 1.35; display: flex; flex-direction: column; }
+.phone-top { display: flex; justify-content: space-between; align-items: baseline; padding: 38px 18px 12px; }
+.phone-top strong { font-weight: 500; font-size: 13px; }
+.phone-top span { color: var(--night-ink-2); font-size: 11px; }
+.view { display: none; flex: 1; flex-direction: column; min-height: 0; padding: 0 12px 16px; animation: view-in 360ms var(--ease); }
+.view.is-on { display: flex; }
+@keyframes view-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.v-card { border-radius: 16px; background: var(--dusk); position: relative; overflow: hidden; }
+.v-map { flex: 1; min-height: 0; }
+.v-map svg, .v-chart svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.v-map path, .v-chart path { fill: none; stroke: var(--night-ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.v-map .ctx { stroke: rgba(245, 245, 243, 0.14); stroke-width: 1; }
+.v-map circle { fill: var(--night-ink); }
+.v-big { padding: 18px 8px 4px; }
+.v-big b { display: block; font: 600 40px / 1 var(--display); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.v-big span { color: var(--night-ink-2); font-size: 11.5px; }
+.v-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 10px; padding: 14px 8px 4px; }
+.v-stats dt { color: var(--night-ink-2); font-size: 10.5px; }
+.v-stats dd { font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.v-chart { height: 120px; margin-top: 10px; }
+.v-chart .area { fill: rgba(245, 245, 243, 0.08); stroke: none; }
+.v-chart .axis { stroke: rgba(245, 245, 243, 0.16); stroke-width: 1; }
+.v-gauge { height: 150px; margin-top: 6px; }
+.v-gauge .tick { stroke: rgba(245, 245, 243, 0.3); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+.v-gauge .arc { stroke: rgba(245, 245, 243, 0.16); stroke-width: 10; fill: none; }
+.v-gauge .used { stroke: var(--night-ink); stroke-width: 10; fill: none; stroke-linecap: round; }
+.v-gauge text { fill: var(--night-ink-2); font: 500 11px var(--font); }
+.v-strip { margin-top: 12px; padding: 14px 12px; }
+.v-strip svg { display: block; width: 100%; height: 34px; }
+.v-strip .base { stroke: rgba(245, 245, 243, 0.2); stroke-width: 1; }
+.v-strip .ev { stroke: rgba(245, 245, 243, 0.55); stroke-width: 2; }
+.v-strip .ev-max { stroke: var(--night-ink); stroke-width: 3; }
+.v-row { display: flex; justify-content: space-between; color: var(--night-ink-2); font-size: 10.5px; margin-top: 6px; }
+.v-foot { margin-top: auto; padding: 10px 0 0; }
+.v-share { padding: 10px 0; border-radius: 12px; background: var(--night-soft); text-align: center; font-weight: 500; }
+
+/* ---------- together: one full picture ---------- */
+.together { position: relative; min-height: clamp(560px, 54vw, 940px); display: grid; align-items: end; background: var(--night); color: var(--night-ink); }
+.together .media { position: absolute; inset: 0; }
+.together .media > img { object-position: 50% 40%; }
+.together::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg, rgba(11, 11, 12, 0.9) 0%, rgba(11, 11, 12, 0.4) 34%, rgba(11, 11, 12, 0) 58%), linear-gradient(90deg, rgba(11, 11, 12, 0.5) 0%, rgba(11, 11, 12, 0) 45%); }
+.together-copy { position: relative; z-index: 1; width: 100%; padding-bottom: clamp(48px, 6vw, 96px); display: grid; gap: 18px; justify-items: start; }
+.together-copy p { color: rgba(245, 245, 243, 0.82); font-size: var(--fs-lead); max-width: 38ch; }
+.together-copy .link { color: var(--night-ink); }
+
+/* ---------- sensors ---------- */
+.figures { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(20px, 2.6vw, 40px); }
+.figure { border-top: 1px solid var(--fg); padding-top: 18px; }
+.figure b { display: block; font: 500 var(--fs-stat) / 1 var(--display); letter-spacing: -0.035em; font-variant-numeric: lining-nums; white-space: nowrap; }
+.figure b small { font-size: 0.38em; letter-spacing: 0; margin-left: 6px; font-weight: 500; }
+.figure span { display: block; margin-top: 12px; font-size: var(--fs-ui); color: var(--fg-2); max-width: 24ch; }
+.bench { margin-top: clamp(80px, 9vw, 140px); background: var(--paper); color: var(--ink); color-scheme: light; padding-block: clamp(40px, 5vw, 80px); }
+.bench-box { position: relative; }
+.bench-stage { position: relative; aspect-ratio: 2 / 1; }
+.bench-stage .media { position: absolute; inset: 0; background: none; }
+.bench-stage .media > img {
+  object-fit: contain;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent), linear-gradient(180deg, transparent, #000 5%, #000 95%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent), linear-gradient(180deg, transparent, #000 5%, #000 95%, transparent);
+  mask-composite: intersect;
+}
+.part {
+  position: absolute; z-index: 2; transform: translate(-50%, -50%);
+  display: grid; place-items: center; width: 26px; height: 26px; padding: 0; border-radius: 50%;
+  border: 1px solid rgba(22, 23, 26, 0.4); background: var(--paper); color: var(--ink);
+  font-size: 11px; font-variant-numeric: tabular-nums; line-height: 1; cursor: pointer;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.part:hover { transform: translate(-50%, -50%) scale(1.12); }
+.part[aria-pressed='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.part-card { position: absolute; z-index: 3; left: 0; bottom: 0; width: min(36%, 400px); padding-top: 16px; border-top: 1px solid var(--ink); display: grid; gap: 8px; }
+.part-card .part-k { font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2); }
+.part-card h3 { font: 600 26px / 1.1 var(--display); letter-spacing: -0.02em; }
+.part-card p { color: var(--ink-2); font-size: 15px; }
+.part-card ul { display: grid; gap: 4px; font-size: 14px; }
+.part-card li { display: flex; gap: 10px; }
+.part-card li::before { content: ''; flex: none; width: 4px; height: 4px; margin-top: 9px; border-radius: 50%; background: var(--ink); }
+.bench-legend { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 0 16px; margin-top: 32px; border-top: 1px solid #d3d4d8; }
+.bench-legend button { padding: 14px 0 0; border: 0; background: none; text-align: left; font-size: 13px; line-height: 1.35; color: var(--ink-2); cursor: pointer; }
+.bench-legend button b { display: block; margin-bottom: 4px; font-weight: 400; color: var(--ink); font-variant-numeric: tabular-nums; }
+.bench-legend button[aria-pressed='true'] { color: var(--ink); }
+.bench-legend button[aria-pressed='true'] b { font-weight: 600; }
+/* Without the exploded photograph: the parts as a list on the left, the chosen part on the right.
+   Remove the no-image class from .bench to bring the photograph and its numbers back. */
+.bench.no-image .bench-stage { display: none; }
+.bench.no-image .wrap { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 112px); align-items: start; }
+.bench.no-image .bench-legend { order: -1; grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: 0; border-top: 0; border-bottom: 1px solid #d3d4d8; }
+.bench.no-image .bench-legend button { display: flex; gap: 14px; padding: 13px 0; border-top: 1px solid #d3d4d8; font-size: 15px; transition: color var(--dur) var(--ease); }
+.bench.no-image .bench-legend button:hover { color: var(--ink); }
+.bench.no-image .bench-legend button b { display: inline-block; width: 1.6em; margin: 0; }
+.bench.no-image .part-card { position: static; width: auto; min-height: 260px; align-content: start; padding-top: 22px; }
+.bench.no-image .part-card h3 { font-size: clamp(30px, 3.2vw, 48px); letter-spacing: -0.03em; }
+.bench.no-image .part-card p { font-size: 17px; max-width: 40ch; }
+.bench.no-image .part-card ul { margin-top: 8px; font-size: 16px; gap: 8px; }
+.plate { position: relative; height: clamp(560px, 56.25vw, 1200px); background: #000; color: var(--night-ink); }
+.plate .media { position: absolute; inset: 0; }
+.plate .media > img { object-position: 62% 50%; }
+.plate::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0) 48%); }
+.plate-copy { position: absolute; z-index: 1; left: 0; right: 0; top: clamp(72px, 8vw, 128px); }
+.plate-copy .h2 { max-width: 9em; }
+.plate-copy p { margin-top: 20px; color: rgba(245, 245, 243, 0.78); max-width: 34ch; font-size: var(--fs-lead); }
+
+/* ---------- specs ---------- */
+.specs { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(40px, 6vw, 112px); align-items: start; }
+.spec-product { position: sticky; top: 112px; }
+.spec-product .media { aspect-ratio: 2 / 1; background: none; }
+.spec-product .media > img { object-fit: cover; }
+.group { border-top: 1px solid var(--line); }
+.group:last-child { border-bottom: 1px solid var(--line); }
+.group summary { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; cursor: pointer; list-style: none; font: 600 22px / 1.2 var(--display); letter-spacing: -0.015em; }
+.group summary::-webkit-details-marker { display: none; }
+.group summary i { position: relative; width: 14px; height: 14px; flex: none; }
+.group summary i::before, .group summary i::after { content: ''; position: absolute; left: 0; top: 6.5px; width: 14px; height: 1px; background: currentColor; transition: transform var(--dur) var(--ease); }
+.group summary i::after { transform: rotate(90deg); }
+.group[open] summary i::after { transform: rotate(0deg); }
+.group dl { padding-bottom: 20px; }
+.row { display: grid; grid-template-columns: minmax(120px, 0.8fr) minmax(0, 1.4fr); gap: 16px; padding: 13px 0; border-top: 1px solid var(--line); font-size: 15px; }
+.row dt { color: var(--ink-2); }
+.closeups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 4px 0 28px; }
+.closeups .media { aspect-ratio: 4 / 5; }
+.closeups figcaption { margin-top: 10px; font-size: 13px; color: var(--ink-2); }
+
+/* ---------- early access over the last bend ---------- */
+.ea { position: relative; min-height: clamp(760px, 66vw, 1080px); display: grid; align-items: center; background: var(--night); color: var(--night-ink); }
+.ea > .media { position: absolute; inset: 0; }
+.ea > .media > img { object-position: 60% 62%; }
+.ea::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(11, 11, 12, 0.92) 0%, rgba(11, 11, 12, 0.6) 36%, rgba(11, 11, 12, 0) 62%), linear-gradient(0deg, rgba(11, 11, 12, 0.6) 0%, rgba(11, 11, 12, 0) 30%); }
+.ea-inner { position: relative; z-index: 1; width: 100%; padding-block: clamp(96px, 10vw, 160px); }
+.ea-col { max-width: 540px; display: grid; gap: 18px; }
+.ea-col > p { color: rgba(245, 245, 243, 0.8); font-size: var(--fs-lead); max-width: 34ch; }
+
+.early-form {
+  margin-top: 18px; padding: clamp(22px, 2.6vw, 32px); border-radius: 22px;
+  background: rgba(18, 19, 21, 0.74); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); color: var(--night-ink);
+}
+.form-progress-row { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px; font-size: 12px; }
+.form-progress-row strong { font-weight: 500; color: var(--night-ink-2); font-variant-numeric: tabular-nums; }
+.form-progress { height: 2px; background: rgba(245, 245, 243, 0.14); }
+.form-progress span { display: block; height: 100%; background: var(--night-ink); transition: width var(--dur) var(--ease); }
+.form-step { margin: 16px 0 0; padding: 0; border: 0; min-width: 0; }
+.form-step legend, .form-step h4 { padding: 0; font: 600 clamp(22px, 2vw, 28px) / 1.12 var(--display); letter-spacing: -0.02em; text-wrap: balance; }
+.form-step-hint { min-height: 1.5em; margin-top: 6px; color: var(--night-ink-2); font-size: 13px; }
+.choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+.choice-option {
+  position: relative; display: flex; align-items: center; gap: 12px; min-height: 50px; padding: 10px 16px;
+  border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(245, 245, 243, 0.16); background: rgba(245, 245, 243, 0.03);
+  font-size: 14px; line-height: 1.3; cursor: pointer; transition: box-shadow var(--dur) var(--ease), background-color var(--dur) var(--ease);
+}
+.choice-option:hover { box-shadow: inset 0 0 0 1px rgba(245, 245, 243, 0.4); }
+.choice-option input { position: absolute; opacity: 0; pointer-events: none; }
+.choice-mark { flex: none; width: 16px; height: 16px; border-radius: 50%; box-shadow: inset 0 0 0 1px #6b6d72; display: grid; place-items: center; }
+.choice-option[data-multi] .choice-mark { border-radius: 4px; }
+.choice-option.is-selected { box-shadow: inset 0 0 0 1px var(--night-ink); background: rgba(245, 245, 243, 0.1); }
+.choice-option.is-selected .choice-mark { background: var(--night-ink); box-shadow: none; }
+.choice-option.is-selected .choice-mark::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--night); }
+.choice-option[data-multi].is-selected .choice-mark::after { border-radius: 1px; }
+.choice-option:has(input:focus-visible) { outline: 2px solid var(--night-ink); outline-offset: 2px; }
+.form-fields { display: grid; gap: 14px; margin-top: 16px; }
+.form-fields label { display: grid; gap: 6px; font-size: 13px; color: var(--night-ink-2); }
+.form-fields input[type='email'], .form-fields input[type='text'] { height: 48px; padding: 0 18px; border: 0; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(245, 245, 243, 0.18); background: rgba(245, 245, 243, 0.05); color: var(--night-ink); font: 15px var(--font); }
+.form-consent { display: flex !important; align-items: flex-start; gap: 10px !important; line-height: 1.5; cursor: pointer; }
+.form-consent input { margin: 3px 0 0; accent-color: var(--night-ink); flex: none; }
+.form-error { margin-top: 12px; color: #f0b9a8; font-size: 13px; }
+.form-actions { display: flex; justify-content: space-between; gap: 12px; margin-top: 22px; }
+.form-actions .pill { height: 44px; padding: 0 22px; }
+.form-back { background: transparent; color: var(--night-ink-2); box-shadow: inset 0 0 0 1px rgba(245, 245, 243, 0.18); }
+.form-back:disabled { opacity: 0.35; cursor: default; }
+.form-next { background: var(--night-ink); color: var(--ink); }
+.form-next:disabled { opacity: 0.45; cursor: default; }
+.form-done { padding: 6px 0 2px; }
+.form-done h4 { font: 600 26px / 1.15 var(--display); letter-spacing: -0.02em; margin-top: 8px; }
+.form-done p { margin-top: 10px; color: var(--night-ink-2); font-size: var(--fs-ui); max-width: 42ch; }
+
+/* ---------- footer ---------- */
+.footer { padding-block: 56px 40px; border-top: 1px solid var(--night-line); }
+.footer-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 20px 40px; padding-bottom: 32px; border-bottom: 1px solid var(--night-line); }
+.footer-top .wordmark { font-size: 22px; }
+.footer-links { display: flex; flex-wrap: wrap; gap: 10px 28px; font-size: 14px; }
+.footer-links a { color: var(--night-ink-2); text-decoration: none; }
+.footer-links a:hover { color: var(--night-ink); }
+.footer-safety { margin-top: 28px; font-size: var(--fs-ui); color: var(--night-ink-2); max-width: 90ch; }
+.footer-safety strong { color: var(--night-ink); font-weight: 500; }
+.footnotes { margin-top: 18px; padding-left: 18px; list-style: decimal; color: var(--night-ink-2); font-size: var(--fs-fine); line-height: 1.6; display: grid; gap: 6px; max-width: 110ch; }
+.footnotes li:target { color: var(--night-ink); }
+.footer-base { display: flex; justify-content: space-between; margin-top: 36px; }
+
+/* ---------- motion ---------- */
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-reveal] { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .view { animation: none; }
+  .steps-media .media, .step, .stop { transition: none; }
+}
+
+/* ---------- smaller screens ---------- */
+@media (max-width: 1100px) {
+  .bench-legend { grid-template-columns: repeat(5, minmax(0, 1fr)); row-gap: 8px; }
+}
+@media (max-width: 960px) {
+  .route { display: none; }
+  .header { grid-template-columns: auto auto; justify-content: space-between; }
+  .header[data-pinned]::after { display: block; }
+  .head, .together-copy { grid-template-columns: minmax(0, 1fr); }
+  .head .lead { justify-self: start; }
+  .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 40px; }
+  .specs { grid-template-columns: minmax(0, 1fr); }
+  .spec-product { position: static; max-width: 560px; }
+  .ride-panel { max-width: none; min-height: 0; }
+  .ride { display: flex; flex-direction: column; }
+  .ride-photo { order: 1; }
+  .phone { order: 2; position: relative; right: auto; top: auto; margin: -18% auto 0; }
+  .ride-panel { order: 3; }
+}
+@media (max-width: 860px), (max-aspect-ratio: 13 / 10) {
+  .hero { display: block; min-height: 0; }
+  .hero-copy { width: auto; padding: calc(60px + var(--top) + 28px) var(--gr) 32px var(--gl); box-sizing: border-box; }
+  .hero-frame { position: relative; inset: auto; aspect-ratio: 4 / 5; max-height: 92svh; width: 100%; }
+  .hero-frame::after { display: none; }
+  .hero-frame img { object-position: 50% 45%; }
+  .hero-title { font-size: clamp(38px, 11vw, 64px); }
+}
+@media (max-width: 767px) {
+  .hero-actions .pill { flex: 1 1 100%; }
+  .hero-actions { width: 100%; }
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .steps-media { display: none; }
+  .step-m { display: block; }
+  .step, .step:first-child, .step:last-child { min-height: 0; padding-block: 28px; }
+  .steps.is-live .step:not(.is-on) { opacity: 1; }
+  .roles { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .trip { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .trip-map { top: calc(60px + var(--top)); margin-left: calc(-1 * var(--gl)); margin-right: calc(-1 * var(--gr)); padding: 0 var(--gr) 12px var(--gl); background: var(--dusk); }
+  .map-stage { margin-left: calc(-1 * var(--gl)); margin-right: calc(-1 * var(--gr)); border-left: 0; border-right: 0; }
+  .map-status { margin-top: 10px; font-size: 12px; }
+  .trip-legend { display: none; }
+  .stop { min-height: 0; padding-block: 28px; }
+  .trip.is-live .stop:not(.is-on) { opacity: 1; }
+  .ride-photo { aspect-ratio: 4 / 3; }
+  .phone { width: 236px; margin-top: -28%; }
+  .together { display: block; min-height: 0; }
+  .together .media { position: relative; inset: auto; aspect-ratio: 4 / 3; }
+  .together::after { display: none; }
+  .together-copy { padding-top: 32px; }
+  .figures { grid-template-columns: minmax(0, 1fr); row-gap: 28px; }
+  .part { width: 20px; height: 20px; font-size: 10px; }
+  .part-card { position: static; width: auto; margin-top: 24px; }
+  .bench-legend { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bench.no-image .wrap { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .bench.no-image .bench-legend { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
+  .bench.no-image .part-card { min-height: 0; }
+  .plate { height: auto; background: none; }
+  .plate .media { position: relative; inset: auto; aspect-ratio: 4 / 5; }
+  .plate::after { display: none; }
+  .plate-copy { position: relative; top: auto; padding-top: 28px; }
+  .row { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); }
+  .ea { display: block; min-height: 0; }
+  .ea > .media { position: relative; inset: auto; aspect-ratio: 4 / 3; }
+  .ea::after { display: none; }
+  .ea-inner { padding-top: 32px; padding-bottom: 72px; }
+  .choice-grid { grid-template-columns: minmax(0, 1fr); }
+}
+</style>
+
+<header class="header" id="site-header">
+  <a class="wordmark" href="#top">MOKUKU MOTO</a>
+  <nav class="route" id="route" aria-label="Sections">
+    <span class="route-track" aria-hidden="true"></span>
+    <span class="route-fill" aria-hidden="true"></span>
+    <button type="button" class="route-stop" data-go="navigation" style="left:0%"><span class="route-dot"></span><span class="route-label">Navigation</span></button>
+    <button type="button" class="route-stop" data-go="roads" style="left:25%"><span class="route-dot"></span><span class="route-label">Roads</span></button>
+    <button type="button" class="route-stop" data-go="ride-data" style="left:50%"><span class="route-dot"></span><span class="route-label">Ride data</span></button>
+    <button type="button" class="route-stop" data-go="sensors" style="left:75%"><span class="route-dot"></span><span class="route-label">Sensors</span></button>
+    <button type="button" class="route-stop" data-go="specs" style="left:100%"><span class="route-dot"></span><span class="route-label">Specs</span></button>
+  </nav>
+  <a class="pill pill-solid pill-small header-cta" href="#early-access" data-cta="header_early_access">Early Access</a>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero soft" id="top" data-module="hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <h1 class="hero-title" id="hero-title">MOKUKU MOTO</h1>
+      <p class="hero-line">Precision sensing. Confident navigation.</p>
+      <div class="hero-actions">
+        <a class="pill pill-solid" href="#early-access" data-cta="hero_early_access">Join Early Access</a>
+        <a class="pill pill-line" href="#navigation" data-cta="hero_see_navigation">See how it navigates</a>
+      </div>
+    </div>
+    <figure class="hero-frame media" id="hero-frame" data-shot="HR-5" data-shot-mobile="HR-4" data-mobile-media="(max-width: 860px), (max-aspect-ratio: 13 / 10)" data-sizes="100vw" data-eager data-alt="MOKUKU MOTO on the handlebar in late-morning sun, seen at an angle, an Alpine road running on ahead"></figure>
+  </section>
+
+  <!-- NAVIGATION -->
+  <section class="section light" id="navigation" data-module="navigation" aria-labelledby="navigation-title">
+    <div class="wrap">
+      <header class="head" data-reveal>
+        <h2 class="h2" id="navigation-title">Your phone stays in your pocket</h2>
+        <p class="lead">Set the route before you ride. The directions come to the bar, where a glance is enough.</p>
+      </header>
+      <div class="steps" id="steps">
+        <div class="steps-media" aria-hidden="true">
+          <figure class="media is-on" data-shot="NV-1" data-sizes="(max-width: 767px) 92vw, 54vw" data-alt=""></figure>
+          <figure class="media" data-shot="NV-2" data-sizes="54vw" data-alt=""></figure>
+          <figure class="media" data-shot="NV-3" data-sizes="54vw" data-alt=""></figure>
+          <figure class="media" data-shot="NV-4" data-sizes="54vw" data-alt=""></figure>
+          <figure class="media" data-shot="NV-5" data-sizes="54vw" data-alt=""></figure>
+        </div>
+        <ol class="steps-list">
+          <li class="step is-on" data-feature="set_route">
+            <figure class="step-m media" data-shot="NV-1" data-sizes="92vw" data-alt="A rider beside his parked bike sets a destination on his phone"></figure>
+            <span class="step-n">01</span>
+            <h3 class="h3">Set it before you ride</h3>
+            <p class="text">Pick a destination in the MOKUKU MOTO app. The route goes to the device over Bluetooth.<sup class="note"><a href="#fn-4" aria-label="Footnote 4">4</a></sup></p>
+          </li>
+          <li class="step" data-feature="phone_in_pocket">
+            <figure class="step-m media" data-shot="NV-2" data-sizes="92vw" data-alt="A gloved hand zips a phone into a jacket pocket, the device on the bar behind"></figure>
+            <span class="step-n">02</span>
+            <h3 class="h3">Then put the phone away</h3>
+            <p class="text">Zip it into a pocket. The phone handles maps and traffic; the device works out where you are.</p>
+          </li>
+          <li class="step" data-feature="glance_guidance">
+            <figure class="step-m media" data-shot="NV-3" data-sizes="92vw" data-alt="Over the rider's shoulder: the next turn on the handlebar display"></figure>
+            <span class="step-n">03</span>
+            <h3 class="h3">A glance, not a stare</h3>
+            <p class="text">The next turn and how far away it is, sized to read in a moment.</p>
+          </li>
+          <li class="step" data-feature="mip_display">
+            <figure class="step-m media" data-shot="NV-4" data-sizes="92vw" data-alt="The display on the handlebar in hard midday sun"></figure>
+            <span class="step-n">04</span>
+            <h3 class="h3">Clearer in bright sun</h3>
+            <p class="text">The reflective MIP display uses daylight to stay readable. The brighter the day, the clearer it looks.</p>
+          </li>
+          <li class="step" data-feature="physical_buttons">
+            <figure class="step-m media" data-shot="NV-5" data-sizes="92vw" data-alt="A gloved thumb next to the two buttons"></figure>
+            <span class="step-n">05</span>
+            <h3 class="h3">Two buttons, gloves on</h3>
+            <p class="text">Two physical buttons you can find and press in riding gloves.</p>
+          </li>
+        </ol>
+      </div>
+      <div class="roles" data-reveal>
+        <div class="role">
+          <span class="role-k">On the bar</span>
+          <h3>MOKUKU MOTO</h3>
+          <p>Works out where you are with its own satellite receiver and motion sensors, shows each turn and records the ride.</p>
+        </div>
+        <div class="role">
+          <span class="role-k">In your pocket</span>
+          <h3>The MOKUKU MOTO app</h3>
+          <p>Plans the route, brings in live traffic and keeps your rides. Download maps here before you head off grid.<sup class="note"><a href="#fn-5" aria-label="Footnote 5">5</a></sup></p>
+        </div>
+        <div class="role">
+          <span class="role-k">At home</span>
+          <h3>Wi-Fi</h3>
+          <p>Software updates arrive over Wi-Fi.</p>
+        </div>
+      </div>
+      <p class="fine roles-note">The device and the app talk over Bluetooth.<sup class="note"><a href="#fn-4" aria-label="Footnote 4">4</a></sup></p>
+    </div>
+  </section>
+
+  <!-- STATEMENT + ROADS -->
+  <section class="statement dusk" data-module="statement" aria-label="About MOKUKU MOTO">
+    <div class="wrap">
+      <p class="statement-text" data-reveal>Satellite signal drops in tunnels and between towers. <span>MOKUKU MOTO keeps your place.</span></p>
+    </div>
+  </section>
+  <section class="section dusk" id="roads" data-module="roads" aria-labelledby="roads-title" style="padding-top:0">
+    <div class="wrap">
+      <header class="head" data-reveal>
+        <h2 class="h2" id="roads-title">Built for the hard parts of the road</h2>
+        <p class="lead">Phone navigation relies on satellites alone, so it drifts and jumps where the signal is poor. MOKUKU MOTO adds its own motion sensors to hold a steady position.</p>
+      </header>
+      <div class="trip" id="trip">
+        <div class="trip-map">
+          <div class="map-stage">
+            <canvas id="map-canvas" aria-hidden="true"></canvas>
+            <svg viewBox="0 0 1600 800" role="img" aria-labelledby="map-title">
+              <title id="map-title">One ride from the city to the mountains, through a tunnel, with five stops</title>
+              <path class="r-casing" d="M96 690 H280 V524 H440 V604 H566 C628 604 664 590 704 560 C738 535 770 516 806 500 L1044 408 C1110 384 1196 382 1236 352 C1276 322 1222 304 1182 294 C1132 282 1150 242 1210 238 C1290 232 1332 214 1302 190 C1272 166 1300 140 1372 138 L1520 132"/>
+              <path class="r-dim" d="M96 690 H280 V524 H440 V604 H566 C628 604 664 590 704 560 C738 535 770 516 806 500 L1044 408 C1110 384 1196 382 1236 352 C1276 322 1222 304 1182 294 C1132 282 1150 242 1210 238 C1290 232 1332 214 1302 190 C1272 166 1300 140 1372 138 L1520 132"/>
+              <path class="r-done" id="trip-route" d="M96 690 H280 V524 H440 V604 H566 C628 604 664 590 704 560 C738 535 770 516 806 500 L1044 408 C1110 384 1196 382 1236 352 C1276 322 1222 304 1182 294 C1132 282 1150 242 1210 238 C1290 232 1332 214 1302 190 C1272 166 1300 140 1372 138 L1520 132"/>
+              <path class="r-gap" d="M818 495 L1032 413"/>
+              <g class="pt" data-i="0" transform="translate(280 610)"><circle r="24"/><text text-anchor="middle" dy="0.36em">1</text></g>
+              <g class="pt" data-i="1" transform="translate(440 564)"><circle r="24"/><text text-anchor="middle" dy="0.36em">2</text></g>
+              <g class="pt" data-i="2" transform="translate(925 454)"><circle r="24"/><text text-anchor="middle" dy="0.36em">3</text></g>
+              <g class="pt" data-i="3" transform="translate(1210 238)"><circle r="24"/><text text-anchor="middle" dy="0.36em">4</text></g>
+              <g class="pt" data-i="4" transform="translate(1500 133)"><circle r="24"/><text text-anchor="middle" dy="0.36em">5</text></g>
+              <g id="rider" transform="translate(96 690)"><circle class="rider-halo" r="22"/><circle class="rider-dot" r="7"/></g>
+            </svg>
+          </div>
+          <p class="map-status" aria-live="polite">
+            <span class="sig"><span class="bars" id="bars" data-level="2" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="sig-text">Satellites: reflected</span></span>
+            <span>Position <strong>on course</strong></span>
+          </p>
+          <ol class="trip-legend">
+            <li><button type="button" data-stop="0" aria-current="true"><b>1</b>Downtown</button></li>
+            <li><button type="button" data-stop="1"><b>2</b>Rush hour</button></li>
+            <li><button type="button" data-stop="2"><b>3</b>Tunnel</button></li>
+            <li><button type="button" data-stop="3"><b>4</b>The pass</button></li>
+            <li><button type="button" data-stop="4"><b>5</b>Off grid</button></li>
+          </ol>
+        </div>
+        <ol class="trip-stops">
+          <li class="stop is-on" id="stop-1" data-feature="urban_canyon" data-level="2" data-sig="Satellites: reflected">
+            <figure class="media" data-shot="RD-1" data-sizes="(max-width: 767px) 92vw, 40vw" data-alt="A rider in a street of tall glass towers, late light between the facades"></figure>
+            <span class="stop-k">1 · Downtown</span>
+            <h3 class="h3">Between tall buildings</h3>
+            <p class="text">Glass and concrete bounce satellite signals around. The inertial sensors keep your position from jumping across the street.</p>
+          </li>
+          <li class="stop" id="stop-2" data-feature="low_speed" data-level="3" data-sig="Satellites: good">
+            <figure class="media" data-shot="TN-2" data-sizes="(max-width: 767px) 92vw, 40vw" data-alt="Rolling slowly in evening traffic, the turn arrow on the handlebar display"></figure>
+            <span class="stop-k">2 · Rush hour</span>
+            <h3 class="h3">Slow traffic, steady arrow</h3>
+            <p class="text">At walking pace and at the lights, where satellite heading wanders, the magnetometer keeps the arrow pointing the right way.</p>
+          </li>
+          <li class="stop" id="stop-3" data-feature="tunnel" data-level="0" data-sig="Satellites: none">
+            <figure class="media" data-shot="TN-1" data-sizes="(max-width: 767px) 92vw, 40vw" data-alt="Deep in a long tunnel, a rider from behind, the exit far ahead"></figure>
+            <span class="stop-k">3 · Tunnel</span>
+            <h3 class="h3">Into the tunnel. Still on course.</h3>
+            <p class="text">When the sky disappears, the inertial sensors carry on, tracking up to 400&nbsp;m without satellite signal.<sup class="note"><a href="#fn-2" aria-label="Footnote 2">2</a></sup></p>
+          </li>
+          <li class="stop" id="stop-4" data-feature="close_turns" data-level="3" data-sig="Satellites: good">
+            <figure class="media" data-shot="RD-2" data-sizes="(max-width: 767px) 92vw, 40vw" data-alt="A rider leaning into a hairpin on an Alpine pass"></figure>
+            <span class="stop-k">4 · The pass</span>
+            <h3 class="h3">Turn after turn</h3>
+            <p class="text">Through switchbacks and junctions one after another, the IMU senses each lean and change of direction as it happens.</p>
+          </li>
+          <li class="stop" id="stop-5" data-feature="remote" data-level="4" data-sig="Satellites: clear · No phone signal">
+            <figure class="media" data-shot="TN-3" data-sizes="(max-width: 767px) 92vw, 40vw" data-alt="A lone rider on an empty plateau road"></figure>
+            <span class="stop-k">5 · Off grid</span>
+            <h3 class="h3">Beyond phone coverage</h3>
+            <p class="text">Download maps in the app before you go. Where there's no phone signal, positioning carries on from satellites and the device's own sensors.<sup class="note"><a href="#fn-5" aria-label="Footnote 5">5</a></sup></p>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- RIDE DATA -->
+  <section class="section light" id="ride-data" data-module="ride_data" aria-labelledby="ride-title">
+    <div class="wrap">
+      <header class="head" data-reveal>
+        <h2 class="h2" id="ride-title">Every ride, on the record</h2>
+        <p class="lead">The device records as you ride and syncs to the app over Bluetooth. Look back at the route, the climbs and how you rode them.</p>
+      </header>
+      <div class="ride">
+        <figure class="ride-photo media" data-shot="RT-1" data-sizes="(max-width: 767px) 100vw, 92vw" data-alt="After the ride: a rider sits on a stone wall at a mountain viewpoint, the bike parked beside him"></figure>
+        <div class="ride-panel">
+          <div class="tabs" role="tablist" aria-label="Ride data">
+            <button type="button" class="tab" role="tab" id="tab-route" aria-controls="view-route" aria-selected="true" data-view="route">Route</button>
+            <button type="button" class="tab" role="tab" id="tab-lean" aria-controls="view-lean" aria-selected="false" data-view="lean" tabindex="-1">Lean angle</button>
+            <button type="button" class="tab" role="tab" id="tab-braking" aria-controls="view-braking" aria-selected="false" data-view="braking" tabindex="-1">Braking</button>
+            <button type="button" class="tab" role="tab" id="tab-climbs" aria-controls="view-climbs" aria-selected="false" data-view="climbs" tabindex="-1">Climbs</button>
+          </div>
+          <div class="tab-copy" aria-live="polite">
+            <p data-copy="route">The line you rode, turn by turn, on the map.</p>
+            <p data-copy="lean" hidden>How far you leaned into each corner, measured by the motion sensors.</p>
+            <p data-copy="braking" hidden>The g-forces of the ride, so you can see where you braked hard.</p>
+            <p data-copy="climbs" hidden>Relative altitude from the barometer, to about ±0.25&nbsp;m.<sup class="note"><a href="#fn-1" aria-label="Footnote 1">1</a></sup></p>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="phone-top"><strong>Saturday ride</strong><span>Alps loop</span></div>
+            <div class="view is-on" id="view-route" role="tabpanel" aria-labelledby="tab-route">
+              <div class="v-card v-map">
+                <svg viewBox="40 90 1520 640" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                  <path class="ctx" d="M60 640 H620 M60 524 H620 M280 380 V760 M440 380 V760 M640 800 C700 640 760 520 840 240"/>
+                  <path d="M96 690 H280 V524 H440 V604 H566 C628 604 664 590 704 560 C738 535 770 516 806 500 L1044 408 C1110 384 1196 382 1236 352 C1276 322 1222 304 1182 294 C1132 282 1150 242 1210 238 C1290 232 1332 214 1302 190 C1272 166 1300 140 1372 138 L1520 132"/>
+                  <circle cx="96" cy="690" r="16"/><circle cx="1520" cy="132" r="16"/>
+                </svg>
+              </div>
+              <dl class="v-stats">
+                <div><dt>Distance</dt><dd>186 km</dd></div>
+                <div><dt>Riding time</dt><dd>4 h 12 m</dd></div>
+                <div><dt>Corners</dt><dd>214</dd></div>
+                <div><dt>Tunnels</dt><dd>3</dd></div>
+              </dl>
+              <div class="v-foot"><div class="v-share">Share ride</div></div>
+            </div>
+            <div class="view" id="view-lean" role="tabpanel" aria-labelledby="tab-lean">
+              <div class="v-big"><b>41°</b><span>Deepest lean, right-hander on the pass</span></div>
+              <div class="v-card v-gauge">
+                <svg viewBox="0 0 200 120" aria-hidden="true">
+                  <path class="arc" d="M30 100 A70 70 0 0 1 170 100"/>
+                  <path class="used" d="M100 30 A70 70 0 0 1 145.9 47.2"/>
+                  <path class="used" d="M100 30 A70 70 0 0 0 56.9 44.8" style="opacity:.45"/>
+                  <line class="tick" x1="100" y1="22" x2="100" y2="40"/>
+                  <text x="100" y="114" text-anchor="middle">0°</text>
+                  <text x="22" y="114" text-anchor="middle">L</text>
+                  <text x="178" y="114" text-anchor="middle">R</text>
+                </svg>
+              </div>
+              <dl class="v-stats">
+                <div><dt>Left</dt><dd>38°</dd></div>
+                <div><dt>Right</dt><dd>41°</dd></div>
+              </dl>
+              <div class="v-foot"><div class="v-share">Share ride</div></div>
+            </div>
+            <div class="view" id="view-braking" role="tabpanel" aria-labelledby="tab-braking">
+              <div class="v-big"><b>0.9 g</b><span>Hardest braking, into the tunnel</span></div>
+              <div class="v-card v-strip">
+                <svg viewBox="0 0 200 34" preserveAspectRatio="none" aria-hidden="true">
+                  <line class="base" x1="0" y1="17" x2="200" y2="17"/>
+                  <line class="ev" x1="18" y1="9" x2="18" y2="25"/><line class="ev" x1="31" y1="11" x2="31" y2="23"/>
+                  <line class="ev" x1="52" y1="8" x2="52" y2="26"/><line class="ev" x1="77" y1="11" x2="77" y2="23"/>
+                  <line class="ev-max" x1="96" y1="2" x2="96" y2="32"/><line class="ev" x1="128" y1="10" x2="128" y2="24"/>
+                  <line class="ev" x1="141" y1="8" x2="141" y2="26"/><line class="ev" x1="166" y1="11" x2="166" y2="23"/>
+                  <line class="ev" x1="184" y1="9" x2="184" y2="25"/>
+                </svg>
+                <div class="v-row"><span>Start</span><span>Home</span></div>
+              </div>
+              <dl class="v-stats">
+                <div><dt>Hard stops</dt><dd>9</dd></div>
+                <div><dt>Strongest pull</dt><dd>0.5 g</dd></div>
+              </dl>
+              <div class="v-foot"><div class="v-share">Share ride</div></div>
+            </div>
+            <div class="view" id="view-climbs" role="tabpanel" aria-labelledby="tab-climbs">
+              <div class="v-big"><b>+1,240 m</b><span>Total climb</span></div>
+              <div class="v-card v-chart">
+                <svg viewBox="0 0 200 120" preserveAspectRatio="none" aria-hidden="true">
+                  <line class="axis" x1="0" y1="110" x2="200" y2="110"/>
+                  <path class="area" d="M0 104 L20 102 L36 99 L52 100 L66 94 L78 96 L92 88 L104 90 L116 76 L126 80 L136 62 L146 66 L156 46 L166 50 L176 34 L188 38 L200 30 L200 110 L0 110 Z"/>
+                  <path d="M0 104 L20 102 L36 99 L52 100 L66 94 L78 96 L92 88 L104 90 L116 76 L126 80 L136 62 L146 66 L156 46 L166 50 L176 34 L188 38 L200 30"/>
+                </svg>
+              </div>
+              <dl class="v-stats">
+                <div><dt>Highest point</dt><dd>2,106 m</dd></div>
+                <div><dt>Descent</dt><dd>−1,190 m</dd></div>
+              </dl>
+              <div class="v-foot"><div class="v-share">Share ride</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOGETHER -->
+  <section class="together" id="together" data-module="ride_together" aria-labelledby="together-title">
+    <figure class="media" data-shot="TG-1" data-sizes="100vw" data-alt="Four riders pulled over at a mountain pass, helmets off, laughing"></figure>
+    <div class="wrap together-copy" data-reveal>
+      <h2 class="h2" id="together-title">Better with friends</h2>
+      <p>Three, four, five of you on the same road. Everyone comes home with the whole ride on record, ready to share from the app.</p>
+      <a class="link" href="#early-access" data-cta="ride_together_feedback">Tell us what you'd want for group rides <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </section>
+
+  <!-- SENSORS -->
+  <section class="section dark" id="sensors" data-module="sensors" aria-labelledby="sensors-title" style="padding-bottom:0">
+    <div class="wrap">
+      <header class="head" data-reveal>
+        <h2 class="h2" id="sensors-title">What's inside</h2>
+        <p class="lead">Four sensors and our own fusion software work out where you are and how the bike is moving.</p>
+      </header>
+      <div class="figures" data-reveal>
+        <div class="figure"><b>1.0<small>m CEP</small><sup class="note"><a href="#fn-1" aria-label="Footnote 1">1</a></sup></b><span>Dual-band satellite positioning, L1 and L5, ten updates a second</span></div>
+        <div class="figure"><b>3<small>°/h</small><sup class="note"><a href="#fn-1" aria-label="Footnote 1">1</a></sup></b><span>Gyro bias instability of the automotive-grade IMU</span></div>
+        <div class="figure"><b>18<small>-bit</small><sup class="note"><a href="#fn-1" aria-label="Footnote 1">1</a></sup></b><span>Magnetometer resolution, for a steady heading</span></div>
+        <div class="figure"><b>±3<small>Pa</small><sup class="note"><a href="#fn-1" aria-label="Footnote 1">1</a></sup></b><span>Barometer accuracy, about ±0.25 m of altitude</span></div>
+      </div>
+    </div>
+    <div class="bench no-image">
+      <div class="wrap">
+        <div class="bench-box">
+        <div class="bench-stage" id="bench">
+          <figure class="media" data-shot="SS-1" data-sizes="(max-width: 767px) 100vw, 1344px" data-alt="MOKUKU MOTO taken apart into its layers, from the cover glass to the handlebar mount"></figure>
+          <button type="button" class="part" data-part="0" style="left:12%;top:3.5%" aria-pressed="false" aria-label="Cover glass">1</button>
+          <button type="button" class="part" data-part="1" style="left:29%;top:11%" aria-pressed="false" aria-label="Two MIP screens">2</button>
+          <button type="button" class="part" data-part="2" style="left:39.5%;top:53%" aria-pressed="false" aria-label="Buttons">3</button>
+          <button type="button" class="part" data-part="3" style="left:45.5%;top:56%" aria-pressed="false" aria-label="Satellite antenna">4</button>
+          <button type="button" class="part" data-part="4" style="left:61%;top:32%" aria-pressed="true" aria-label="Satellite receiver">5</button>
+          <button type="button" class="part" data-part="5" style="left:53%;top:32%" aria-pressed="false" aria-label="6-axis IMU">6</button>
+          <button type="button" class="part" data-part="6" style="left:51%;top:66%" aria-pressed="false" aria-label="Magnetometer">7</button>
+          <button type="button" class="part" data-part="7" style="left:60%;top:68%" aria-pressed="false" aria-label="Barometer">8</button>
+          <button type="button" class="part" data-part="8" style="left:71%;top:73%" aria-pressed="false" aria-label="Battery">9</button>
+          <button type="button" class="part" data-part="9" style="left:88%;top:43%" aria-pressed="false" aria-label="Housing and mount">10</button>
+        </div>
+          <div class="part-card" id="part-card" aria-live="polite"></div>
+        </div>
+        <div class="bench-legend" id="bench-legend"></div>
+      </div>
+    </div>
+    <figure class="plate" data-feature="sensor_fusion">
+      <div class="media" data-shot="SS-4" data-sizes="100vw" data-alt="MOKUKU MOTO on the handlebar at night after rain, water beads on the housing"></div>
+      <figcaption class="plate-copy wrap" data-reveal>
+        <h3 class="h2">Sensor fusion, on the device</h3>
+        <p>Our GNSS/INS fusion runs on the device itself. In open sky it reaches decimeter-level positioning, and each inertial update takes under 1&nbsp;ms to compute.<sup class="note"><a href="#fn-2" aria-label="Footnote 2">2</a></sup></p>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- SPECS -->
+  <section class="section light" id="specs" data-module="specs" aria-labelledby="specs-title">
+    <div class="wrap">
+      <header class="head" data-reveal>
+        <h2 class="h2" id="specs-title">MOKUKU MOTO, in detail</h2>
+      </header>
+      <div class="specs">
+        <div class="spec-product">
+          <figure class="media" data-shot="OV-1" data-sizes="(max-width: 960px) 92vw, 40vw" data-alt="MOKUKU MOTO on a short length of handlebar, three-quarter view"></figure>
+        </div>
+        <div>
+          <details class="group" open data-group="positioning">
+            <summary>Positioning<i aria-hidden="true"></i></summary>
+            <dl>
+              <div class="row"><dt>Satellites</dt><dd>Dual-band L1 and L5, multiple constellations<sup class="note"><a href="#fn-1" aria-label="Footnote 1">1</a></sup></dd></div>
+              <div class="row"><dt>Accuracy</dt><dd>1.0 m CEP; 10 Hz updates; 30 ns RMS timing<sup class="note"><a href="#fn-1" aria-label="Footnote 1">1</a></sup></dd></div>
+              <div class="row"><dt>Sensor fusion</dt><dd>GNSS/INS on the device; decimeter-level in open sky; under 1 ms per inertial update<sup class="note"><a href="#fn-2" aria-label="Footnote 2">2</a></sup></dd></div>
+              <div class="row"><dt>Without satellites</dt><dd>Up to 400 m through tunnels<sup class="note"><a href="#fn-2" aria-label="Footnote 2">2</a></sup></dd></div>
+              <div class="row"><dt>Attitude</dt><dd>Pitch and roll within ±2°<sup class="note"><a href="#fn-2" aria-label="Footnote 2">2</a></sup></dd></div>
+            </dl>
+          </details>
+          <details class="group" open data-group="sensors">
+            <summary>Sensors<i aria-hidden="true"></i></summary>
+            <dl>
+              <div class="row"><dt>Motion</dt><dd>Automotive-grade 6-axis IMU<sup class="note"><a href="#fn-1" aria-label="Footnote 1">1</a></sup></dd></div>
+              <div class="row"><dt>Heading</dt><dd>3-axis magnetometer, 18-bit<sup class="note"><a href="#fn-1" aria-label="Footnote 1">1</a></sup></dd></div>
+              <div class="row"><dt>Altitude</dt><dd>Precision barometer, ±3 Pa relative<sup class="note"><a href="#fn-1" aria-label="Footnote 1">1</a></sup></dd></div>
+            </dl>
+          </details>
+          <details class="group" data-group="navigation">
+            <summary>Navigation and data<i aria-hidden="true"></i></summary>
+            <dl>
+              <div class="row"><dt>Routes and traffic</dt><dd>In the MOKUKU MOTO app on your phone<sup class="note"><a href="#fn-4" aria-label="Footnote 4">4</a></sup></dd></div>
+              <div class="row"><dt>Offline</dt><dd>Maps downloaded in the app<sup class="note"><a href="#fn-5" aria-label="Footnote 5">5</a></sup></dd></div>
+              <div class="row"><dt>Connection</dt><dd>Bluetooth to your phone; Wi-Fi for updates</dd></div>
+              <div class="row"><dt>Ride records</dt><dd>Synced over Bluetooth, stored on your phone</dd></div>
+            </dl>
+          </details>
+          <details class="group" data-group="display">
+            <summary>Display and controls<i aria-hidden="true"></i></summary>
+            <dl>
+              <div class="row"><dt>Display</dt><dd>Two round reflective MIP screens, readable in direct sun</dd></div>
+              <div class="row"><dt>Controls</dt><dd>Two physical buttons</dd></div>
+            </dl>
+          </details>
+          <details class="group" data-group="build">
+            <summary>Build and power<i aria-hidden="true"></i></summary>
+            <dl>
+              <div class="row"><dt>Dust and water</dt><dd>IP6K6K, ISO 20653<sup class="note"><a href="#fn-3" aria-label="Footnote 3">3</a></sup></dd></div>
+              <div class="row"><dt>Vibration</dt><dd>IEC 60068-2-64 random vibration<sup class="note"><a href="#fn-3" aria-label="Footnote 3">3</a></sup></dd></div>
+              <div class="row"><dt>Mounting</dt><dd>Handlebar; fits common quarter-turn and action-camera mounts</dd></div>
+              <div class="row"><dt>Battery</dt><dd>Built in, USB-C charging</dd></div>
+            </dl>
+            <div class="closeups">
+              <figure><div class="media" data-shot="SS-2" data-sizes="(max-width: 767px) 44vw, 260px" data-alt="The handlebar clamp, machined black metal"></div><figcaption>The mount</figcaption></figure>
+              <figure><div class="media" data-shot="SS-3" data-sizes="(max-width: 767px) 44vw, 260px" data-alt="The USB-C port under its rubber flap, water beads on the housing"></div><figcaption>The port, sealed</figcaption></figure>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EARLY ACCESS -->
+  <section class="ea" id="early-access" data-module="early_access" aria-labelledby="ea-title">
+    <figure class="media" data-shot="CL-1" data-sizes="100vw" data-alt="Blue hour: a rider rolls down the last bends toward a town's lights"></figure>
+    <div class="wrap ea-inner">
+      <div class="ea-col">
+        <h2 class="h2" id="ea-title">Be first on the road.</h2>
+        <p>Answer a few questions and we'll keep you posted as MOKUKU MOTO gets closer. Joining doesn't place an order.</p>
+        <form class="early-form" id="ea-form" novalidate aria-label="Early Access questionnaire">
+          <div id="ea-body"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer dark" data-module="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <a class="wordmark" href="#top">MOKUKU MOTO</a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="#navigation">Navigation</a><a href="#roads">Roads</a><a href="#ride-data">Ride data</a><a href="#together">Together</a><a href="#sensors">Sensors</a><a href="#specs">Specs</a><a href="#early-access">Early Access</a>
+      </nav>
+    </div>
+    <p class="footer-safety"><strong>Ride safely.</strong> Set your route before you ride, and don't operate the device or your phone while moving. Mount it where it doesn't block your view or controls.</p>
+    <ol class="footnotes">
+      <li id="fn-1">Specification of the individual sensor, from its datasheet.</li>
+      <li id="fn-2">Target performance. Actual results vary with satellite conditions, tunnel length and riding.</li>
+      <li id="fn-3">Design target. IP6K6K under ISO 20653 covers dust and high-pressure water jets, not immersion.</li>
+      <li id="fn-4">Routes, live traffic and rerouting come from the MOKUKU MOTO app on your phone and are sent to the device over Bluetooth. Live traffic uses your phone's data connection.</li>
+      <li id="fn-5">Offline maps are downloaded in the app ahead of time. Positioning uses satellites and the device's own sensors.</li>
+    </ol>
+    <div class="footer-base"><span class="fine">MOKUKU MOTO</span><span class="fine">© 2026</span></div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const phone = () => matchMedia('(max-width: 767px)').matches;
+
+  /* ---------- photographs: h-assets/shots/<id>-<width>.webp ---------- */
+  const SHOTS = {
+    'OV-1': [800, 1448], 'HR-1': [800, 1600, 1672], 'NV-1': [800, 1600, 1672], 'NV-2': [800, 1600, 1672],
+    'NV-3': [800, 1600, 1672], 'NV-4': [800, 1600, 1672], 'NV-5': [800, 1600, 1672], 'RD-1': [800, 1586],
+    'RD-2': [800, 1586], 'TN-1': [800, 1600, 1672], 'TN-2': [800, 1585], 'TN-3': [800, 1586],
+    'RT-1': [800, 1600, 1672], 'TG-1': [800, 1585], 'SS-1': [800, 1600, 1774], 'SS-2': [800, 1122],
+    'SS-3': [800, 1122], 'SS-4': [800, 1600, 1672], 'CL-1': [800, 1600, 1672],
+    'HR-4': [800, 1122], 'HR-5': [800, 1600, 1672],
+  };
+  const src = (id, w) => `h-assets/shots/${id.toLowerCase()}-${w}.webp`;
+  const srcset = (id) => SHOTS[id].map((w) => `${src(id, w)} ${w}w`).join(', ');
+  $$('[data-shot]').forEach((slot) => {
+    let id = slot.dataset.shot;
+    let mobile = slot.dataset.shotMobile;
+    if (!SHOTS[id] && SHOTS[slot.dataset.standIn]) {
+      id = slot.dataset.standIn;
+      mobile = slot.dataset.standInMobile;
+      slot.classList.add('is-stand-in');
+    }
+    const widths = SHOTS[id];
+    if (!widths) return;
+    const img = document.createElement('img');
+    img.src = src(id, widths.includes(1600) ? 1600 : widths[widths.length - 1]);
+    img.srcset = srcset(id);
+    img.sizes = slot.dataset.sizes || '100vw';
+    img.alt = slot.dataset.alt || '';
+    img.decoding = 'async';
+    if ('eager' in slot.dataset) img.fetchPriority = 'high';
+    else img.loading = 'lazy';
+    // a separate portrait picture for phones, when there is one
+    if (mobile && SHOTS[mobile]) {
+      const picture = document.createElement('picture');
+      const source = document.createElement('source');
+      source.media = slot.dataset.mobileMedia || '(max-width: 767px)';
+      source.srcset = srcset(mobile);
+      source.sizes = '100vw';
+      picture.append(source, img);
+      slot.prepend(picture);
+    } else slot.prepend(img);
+  });
+
+  /* ---------- analytics ---------- */
+  const rid = () => Math.random().toString(36).slice(2, 10);
+  let uid = 'u_' + rid();
+  try { uid = localStorage.getItem('moto_uid') || uid; localStorage.setItem('moto_uid', uid); } catch (e) {}
+  const BASE = {
+    anonymous_user_id: uid, session_id: 's_' + rid(), variant: 'A_built_for_extremes', layout: 'v2',
+    page_id: 'mokuku_moto_homepage', conversion_mode: 'early_access',
+    traffic_source: document.referrer ? 'referral' : 'direct',
+    device_type: phone() ? 'mobile' : 'desktop', locale: navigator.language || 'en-US',
+  };
+  window.dataLayer = window.dataLayer || [];
+  const moduleOf = (el) => { const m = el && el.closest('[data-module]'); return m ? { module_id: m.dataset.module } : {}; };
+  function track(event, props = {}, el) {
+    window.dataLayer.push(Object.assign({ event }, BASE, moduleOf(el), props, { timestamp: new Date().toISOString() }));
+  }
+  window.motoTrack = track;
+  if ('IntersectionObserver' in window) {
+    const order = $$('[data-module]').map((m) => m.dataset.module);
+    const seen = new IntersectionObserver((entries) => entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      seen.unobserve(e.target);
+      track('module_view', { module_position: order.indexOf(e.target.dataset.module) + 1 }, e.target);
+    }), { threshold: 0.25 });
+    $$('[data-module]').forEach((m) => seen.observe(m));
+  }
+  document.addEventListener('click', (e) => { const a = e.target.closest('[data-cta]'); if (a) track('cta_click', { cta_id: a.dataset.cta }, a); });
+  const seenFeature = new Set();
+  const impression = (el) => {
+    const id = el && el.dataset.feature;
+    if (!id || seenFeature.has(id)) return;
+    seenFeature.add(id);
+    track('feature_card_impression', { feature_id: id }, el);
+  };
+
+  /* ---------- header: pin, tone, and the route as reading progress ---------- */
+  const header = $('#site-header');
+  const hero = $('#top');
+  const stopsNav = $$('.route-stop');
+  const chapters = stopsNav.map((b) => document.getElementById(b.dataset.go));
+  stopsNav.forEach((b) => b.addEventListener('click', () => {
+    document.getElementById(b.dataset.go).scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth' });
+    track('nav_click', { target: b.dataset.go }, header);
+  }));
+  let pastHero = false;
+
+  function updateHeader() {
+    const vh = innerHeight;
+    const heroBottom = hero.getBoundingClientRect().bottom;
+    const pinned = heroBottom < 64;
+    header.toggleAttribute('data-pinned', pinned);
+    header.toggleAttribute('data-scrolled', scrollY > 4);
+    if (heroBottom < 0 && !pastHero) { pastHero = true; track('hero_scroll_past', {}, hero); }
+    const y = 30 + (parseFloat(getComputedStyle(header).paddingTop) || 0);
+    const under = document.elementsFromPoint(innerWidth / 2, y).find((n) => n.tagName === 'SECTION' || n.tagName === 'FOOTER' || n.classList.contains('bench'));
+    const light = under && (under.matches('.light, .soft, .bench'));
+    header.dataset.tone = light ? 'light' : 'dark';
+
+    // fill: each chapter's top crossing mid-screen moves the rider one stop on
+    const tops = chapters.map((c) => c.getBoundingClientRect().top - vh * 0.5);
+    let fill = 0, current = -1;
+    for (let i = 0; i < tops.length; i++) {
+      if (tops[i] <= 0) {
+        current = i;
+        const next = tops[i + 1];
+        fill = next === undefined ? 1 : (i + clamp(-tops[i] / (next - tops[i]), 0, 1)) / (tops.length - 1);
+      }
+    }
+    header.style.setProperty('--fill', fill.toFixed(4));
+    stopsNav.forEach((b, i) => {
+      b.toggleAttribute('data-passed', i <= current);
+      if (i === current) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+    });
+  }
+
+  /* ---------- navigation steps ---------- */
+  const stepsBox = $('#steps');
+  const steps = $$('.step', stepsBox);
+  const stepMedia = $$('.steps-media .media', stepsBox);
+  let stepOn = 0;
+  function updateSteps() {
+    if (phone()) return;
+    stepsBox.classList.add('is-live');
+    const mid = innerHeight * 0.5;
+    let best = 0, bestD = Infinity;
+    steps.forEach((s, i) => {
+      const r = s.getBoundingClientRect();
+      const d = Math.abs(r.top + r.height / 2 - mid);
+      if (d < bestD) { bestD = d; best = i; }
+    });
+    if (best !== stepOn) {
+      stepOn = best;
+      steps.forEach((s, i) => s.classList.toggle('is-on', i === best));
+      stepMedia.forEach((m, i) => m.classList.toggle('is-on', i === best));
+    }
+    const r = stepsBox.getBoundingClientRect();
+    if (r.top < mid && r.bottom > mid) impression(steps[best]);
+  }
+
+  /* ---------- roads: the rider travels the route as the stops go by ---------- */
+  const trip = $('#trip');
+  const stops = $$('.stop', trip);
+  const route = $('#trip-route');
+  const rider = $('#rider');
+  const pts = $$('.pt', trip);
+  const legend = $$('.trip-legend button', trip);
+  const bars = $('#bars');
+  const sigText = $('#sig-text');
+  const total = route.getTotalLength();
+  const STOP_XY = [[280, 610], [440, 564], [925, 454], [1210, 238], [1500, 133]];
+  const stopLen = STOP_XY.map(([x, y]) => {
+    let best = 0, bestD = Infinity;
+    for (let l = 0; l <= total; l += 2) {
+      const q = route.getPointAtLength(l);
+      const d = (q.x - x) ** 2 + (q.y - y) ** 2;
+      if (d < bestD) { bestD = d; best = l; }
+    }
+    return best;
+  });
+  route.style.strokeDasharray = `${total} ${total}`;
+  let tripOn = -1;
+  function setTripStop(i) {
+    if (i === tripOn) return;
+    tripOn = i;
+    stops.forEach((s, k) => s.classList.toggle('is-on', k === i));
+    pts.forEach((p, k) => p.classList.toggle('is-on', k === i));
+    legend.forEach((b, k) => { if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+    bars.dataset.level = stops[i].dataset.level;
+    sigText.textContent = stops[i].dataset.sig;
+    impression(stops[i]);
+  }
+  function updateTrip() {
+    trip.classList.toggle('is-live', !phone());
+    const box = trip.getBoundingClientRect();
+    if (box.bottom < 0 || box.top > innerHeight) return;
+    const mid = phone() ? innerHeight * 0.62 : innerHeight * 0.5;
+    const c = stops.map((s) => { const r = s.getBoundingClientRect(); return r.top + r.height / 2; });
+    let len;
+    if (mid <= c[0]) len = stopLen[0] * clamp(1 - (c[0] - mid) / (innerHeight * 0.6), 0, 1);
+    else if (mid >= c[c.length - 1]) len = total;
+    else {
+      let i = 0;
+      while (i < c.length - 1 && mid >= c[i + 1]) i++;
+      const t = (mid - c[i]) / (c[i + 1] - c[i]);
+      len = stopLen[i] + t * (stopLen[i + 1] - stopLen[i]);
+    }
+    if (reduced()) len = total;
+    route.style.strokeDashoffset = (total - len).toFixed(1);
+    const q = route.getPointAtLength(len);
+    rider.setAttribute('transform', `translate(${q.x.toFixed(1)} ${q.y.toFixed(1)})`);
+    let near = 0, nd = Infinity;
+    c.forEach((v, i) => { const d = Math.abs(v - mid); if (d < nd) { nd = d; near = i; } });
+    setTripStop(near);
+  }
+  const goStop = (i) => {
+    stops[i].scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'center' });
+    track('scenario_tab_click', { scenario_id: stops[i].dataset.feature }, trip);
+  };
+  legend.forEach((b) => b.addEventListener('click', () => goStop(+b.dataset.stop)));
+  pts.forEach((p) => p.addEventListener('click', () => goStop(+p.dataset.i)));
+
+  // the map underneath: an illustrative point cloud, redrawn per size
+  const canvas = $('#map-canvas');
+  function drawMap() {
+    const box = canvas.getBoundingClientRect();
+    if (!box.width) return;
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    canvas.width = Math.round(box.width * dpr);
+    canvas.height = Math.round(box.height * dpr);
+    const ctx = canvas.getContext('2d');
+    const k = (box.width / 1600) * dpr;
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.clearRect(0, 0, 1600, 800);
+    let seed = 7;
+    const r = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+    const dot = (x, y, a, s = 1.3) => { ctx.globalAlpha = a; ctx.fillRect(x, y, s, s); };
+    ctx.fillStyle = '#f5f5f3';
+    for (let i = 0; i < 2600; i++) dot(r() * 1600, r() * 800, 0.05 + r() * 0.08, 1.1);
+    const xs = [40, 130, 280, 440, 566, 640], ys = [360, 440, 524, 604, 690, 790], street = 18;
+    for (let i = 0; i < xs.length - 1; i++) for (let j = 0; j < ys.length - 1; j++) {
+      const x0 = xs[i] + street / 2, x1 = xs[i + 1] - street / 2, y0 = ys[j] + street / 2, y1 = ys[j + 1] - street / 2;
+      const cols = 1 + Math.floor(r() * 2), rows = 1 + Math.floor(r() * 2);
+      for (let cc = 0; cc < cols; cc++) for (let w = 0; w < rows; w++) {
+        const bx0 = x0 + ((x1 - x0) / cols) * cc + 4, bx1 = x0 + ((x1 - x0) / cols) * (cc + 1) - 4;
+        const by0 = y0 + ((y1 - y0) / rows) * w + 4, by1 = y0 + ((y1 - y0) / rows) * (w + 1) - 4;
+        const tall = Math.max(0, 1 - Math.hypot((bx0 + bx1) / 2 - 360, (by0 + by1) / 2 - 580) / 330);
+        const n = Math.round((bx1 - bx0) * (by1 - by0) * (0.012 + tall * 0.05));
+        for (let q = 0; q < n; q++) dot(bx0 + r() * (bx1 - bx0), by0 + r() * (by1 - by0), 0.16 + tall * 0.42 * r());
+        for (let e = bx0; e < bx1; e += 3) { dot(e, by0, 0.3 + tall * 0.3); dot(e, by1, 0.3 + tall * 0.3); }
+        for (let e = by0; e < by1; e += 3) { dot(bx0, e, 0.3 + tall * 0.3); dot(bx1, e, 0.3 + tall * 0.3); }
+      }
+    }
+    const trail = (pts, a, gap = 3) => {
+      for (let p = 0; p < pts.length - 1; p++) {
+        const [ax, ay] = pts[p], [bx, by] = pts[p + 1];
+        const steps = Math.max(1, Math.round(Math.hypot(bx - ax, by - ay) / gap));
+        for (let s = 0; s < steps; s++) dot(ax + ((bx - ax) * s) / steps + (r() - 0.5), ay + ((by - ay) * s) / steps + (r() - 0.5), a);
+      }
+    };
+    const ring = (cx, cy, rx, ry, a0, a1, wob = 0) => {
+      const out = [];
+      for (let t = a0; t <= a1; t += 0.02) {
+        const w = 1 + wob * Math.sin(t * 3 + cx) + wob * 0.6 * Math.sin(t * 7 + cy);
+        out.push([cx + Math.cos(t) * rx * w, cy + Math.sin(t) * ry * w]);
+      }
+      return out;
+    };
+    const curve = (x0, y0, cx, cy, x1, y1) => {
+      const out = [];
+      for (let t = 0; t <= 1.001; t += 0.02) out.push([(1 - t) ** 2 * x0 + 2 * t * (1 - t) * cx + t * t * x1, (1 - t) ** 2 * y0 + 2 * t * (1 - t) * cy + t * t * y1]);
+      return out;
+    };
+    trail([[640, 800], [690, 690], [730, 590], [770, 470], [806, 330], [830, 240]], 0.42);
+    trail([[650, 800], [700, 690], [740, 590], [780, 470], [816, 330], [840, 240]], 0.3);
+    trail(curve(600, 604, 690, 610, 724, 640), 0.32);
+    trail(curve(752, 520, 760, 600, 820, 610), 0.32);
+    trail([[820, 610], [900, 612], [980, 640]], 0.22);
+    for (let cc = 0; cc < 9; cc++) { const f = 1 - cc / 9; trail(ring(930, 452, 60 + 210 * f, 46 + 190 * f, 0, Math.PI * 2, 0.06), 0.12 + cc * 0.035, 4); }
+    trail(ring(806, 500, 14, 14, Math.PI * 0.6, Math.PI * 1.6), 0.7, 2);
+    trail(ring(1044, 408, 14, 14, -Math.PI * 0.4, Math.PI * 0.6), 0.7, 2);
+    for (let cc = 0; cc < 15; cc++) {
+      const line = [];
+      for (let x = 1060; x <= 1600; x += 6) {
+        const y = 560 - cc * 34 - (x - 1060) * 0.42 + Math.sin(x / 70 + cc) * 12 + Math.sin(x / 23 + cc * 2) * 4;
+        if (y > 0 && y < 800) line.push([x, y]);
+      }
+      if (line.length > 1) trail(line, 0.1 + (cc % 3) * 0.04, 4);
+    }
+    for (let t = 0; t < 70; t++) {
+      const cx = 1080 + r() * 520, cy = 40 + r() * 520;
+      if (cy > 620 - (cx - 1060) * 0.2) continue;
+      const rad = 5 + r() * 12, n = 10 + Math.floor(r() * 22);
+      for (let q = 0; q < n; q++) { const a = r() * Math.PI * 2, d = Math.sqrt(r()) * rad; dot(cx + Math.cos(a) * d, cy + Math.sin(a) * d, 0.2 + r() * 0.3); }
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  /* ---------- ride data: four views of one ride ---------- */
+  const tabs = $$('.tab');
+  const selectTab = (tab, focus) => {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+      $('#view-' + t.dataset.view).classList.toggle('is-on', on);
+      $(`[data-copy="${t.dataset.view}"]`).hidden = !on;
+    });
+    if (focus) tab.focus();
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => { selectTab(t); track('feature_card_click', { feature_id: 'ride_' + t.dataset.view }, t); });
+    t.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      selectTab(tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length], true);
+    });
+  });
+
+  /* ---------- sensors: tap a part to read about it ---------- */
+  const PARTS = [
+    { name: 'Cover glass', k: 'Display', text: 'One flat, anti-glare sheet over both screens.' },
+    { name: 'Two MIP screens', k: 'Display', text: 'Reflective screens that get clearer as the light gets brighter.' },
+    { name: 'Buttons', k: 'Controls', text: 'Two physical buttons, easy to find and press in riding gloves.' },
+    { name: 'Satellite antenna', k: 'Sensor', text: 'Picks up L1 and L5 signals from multiple constellations.' },
+    { name: 'Satellite receiver', k: 'Sensor', text: 'Dual-band GNSS with raw measurements for our fusion software.', specs: ['1.0 m CEP positioning', '10 Hz updates', '30 ns RMS timing'], note: 1 },
+    { name: '6-axis IMU', k: 'Sensor', text: 'Automotive-grade gyroscope and accelerometer, measuring every turn, lean and stop.', specs: ['3°/h gyro bias instability', '5 mdps/√Hz gyro noise', '60 μg/√Hz accelerometer noise'], note: 1 },
+    { name: 'Magnetometer', k: 'Sensor', text: 'Keeps the heading steady at walking pace and standing still.', specs: ['18-bit resolution', '0.4 mG RMS noise', '±8 gauss range'], note: 1 },
+    { name: 'Barometer', k: 'Sensor', text: 'Tracks every climb and descent from changes in air pressure.', specs: ['±3 Pa, about ±0.25 m', '0.02 Pa RMS noise', '200 Hz sampling'], note: 1 },
+    { name: 'Battery', k: 'Power', text: 'Built in, and charges over USB-C.' },
+    { name: 'Housing and mount', k: 'Build', text: 'A sealed housing that clamps to the handlebar.', specs: ['IP6K6K dust and water', 'IEC 60068-2-64 vibration'], note: 3 },
+  ];
+  const card = $('#part-card');
+  const legendBox = $('#bench-legend');
+  legendBox.innerHTML = PARTS.map((p, i) => `<button type="button" data-part="${i}" aria-pressed="${i === 4}"><b>${i + 1}</b>${p.name}</button>`).join('');
+  const partButtons = $$('[data-part]', $('.bench'));
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  function showPart(i) {
+    const p = PARTS[i];
+    partButtons.forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.part === i)));
+    const note = p.note ? `<sup class="note"><a href="#fn-${p.note}" aria-label="Footnote ${p.note}">${p.note}</a></sup>` : '';
+    card.innerHTML = `<span class="part-k">${i + 1} · ${esc(p.k)}</span><h3>${esc(p.name)}</h3><p>${esc(p.text)}${p.specs ? '' : note}</p>${p.specs ? `<ul>${p.specs.map((s, k) => `<li><span>${esc(s)}${k === p.specs.length - 1 ? note : ''}</span></li>`).join('')}</ul>` : ''}`;
+  }
+  partButtons.forEach((b) => b.addEventListener('click', () => {
+    const i = +b.dataset.part;
+    showPart(i);
+    track('sensor_card_click', { sensor_id: PARTS[i].name.toLowerCase().replace(/[^a-z0-9]+/g, '_') }, b);
+  }));
+  showPart(4);
+
+  $$('.group').forEach((d) => $('summary', d).addEventListener('click', () => { if (!d.open) track('specs_group_click', { group: d.dataset.group }, d); }));
+
+  /* ---------- one frame loop for everything tied to scroll ---------- */
+  let frame = 0;
+  const tick = () => { frame = 0; updateHeader(); updateSteps(); updateTrip(); };
+  const schedule = () => { if (!frame) frame = requestAnimationFrame(tick); };
+  addEventListener('scroll', schedule, { passive: true });
+  let resizeTimer = 0;
+  addEventListener('resize', () => { schedule(); clearTimeout(resizeTimer); resizeTimer = setTimeout(drawMap, 150); });
+  drawMap();
+  tick();
+  if (document.fonts) document.fonts.ready.then(schedule);
+
+  /* ---------- Early Access questionnaire ---------- */
+  const STEPS = [
+    { id: 'riding_type', q: 'What kind of riding do you do most?', type: 'single', opts: ['Commuting', 'Touring and long trips', 'Weekend twisties', 'Off-road', 'Something else'] },
+    { id: 'current_nav', q: 'What do you navigate with today?', type: 'single', opts: ['Phone on a handlebar mount', 'Phone mirrored to a bike screen', 'A dedicated motorcycle GPS', "I don't use navigation"] },
+    { id: 'pain_points', q: 'What goes wrong most often?', hint: 'Pick all that apply.', type: 'multi', opts: ['Signal drops in tunnels', 'Position jumps between tall buildings', 'Turn prompts come too late', 'Screen is hard to read in sun', 'Phone overheats or drains', 'Worried about vibration', 'Something else'] },
+    { id: 'group_freq', q: 'How often do you ride with friends?', type: 'single', opts: ['Every week', 'A few times a month', 'A few times a year', 'Rarely or never'] },
+    { id: 'group_wants', q: 'Riding with friends, what would you want?', hint: 'Pick all that apply.', type: 'multi', opts: ['See friends on the ride', 'Share one route with the group', 'Relive the ride together', 'Share to social media', 'Not for me'] },
+    { id: 'top_interest', q: 'What matters most to you?', type: 'single', opts: ['Navigation that stays steady', 'Turn prompts on time', 'Recording my rides', 'Riding with friends', 'Offline maps', 'Getting my phone off the bars'] },
+    { id: 'contact', q: 'Where should we send updates?', type: 'contact' },
+  ];
+  const form = $('#ea-form');
+  const body = $('#ea-body');
+  const state = { step: 0, answers: {}, contact: { email: '', country: '', consent: false }, opened: false, source: 'early_access_section' };
+  const arrowR = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+  const arrowL = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>';
+  const emailOk = () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.contact.email.trim());
+  const ready = () => {
+    const st = STEPS[state.step];
+    if (st.type === 'contact') return emailOk() && state.contact.consent;
+    const a = state.answers[st.id];
+    return st.type === 'multi' ? Array.isArray(a) && a.length > 0 : Boolean(a);
+  };
+  function render(error = '') {
+    const st = STEPS[state.step], n = STEPS.length, last = state.step === n - 1;
+    let html = `<div class="form-progress-row"><strong>Step ${state.step + 1} of ${n}</strong><div class="form-progress" aria-hidden="true"><span style="width:${((state.step + 1) / n) * 100}%"></span></div></div>`;
+    if (st.type === 'contact') {
+      const c = state.contact;
+      html += `<div class="form-step"><h4>${esc(st.q)}</h4><p class="form-step-hint">We'll write when there's news on MOKUKU MOTO.</p>
+        <div class="form-fields">
+          <label for="ea-email">Email<input id="ea-email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" value="${esc(c.email)}"${error ? ' aria-invalid="true"' : ''}></label>
+          <label for="ea-country">Country or region (optional)<input id="ea-country" type="text" autocomplete="country-name" value="${esc(c.country)}"></label>
+          <label class="form-consent" for="ea-consent"><input id="ea-consent" type="checkbox"${c.consent ? ' checked' : ''}><span>Email me about MOKUKU MOTO and Early Access. I can unsubscribe at any time.</span></label>
+        </div></div>`;
+    } else {
+      const multi = st.type === 'multi';
+      const a = state.answers[st.id] || (multi ? [] : '');
+      html += `<fieldset class="form-step"><legend>${esc(st.q)}</legend><p class="form-step-hint">${esc(st.hint || '')}</p><div class="choice-grid">`;
+      st.opts.forEach((o, i) => {
+        const on = multi ? a.includes(o) : a === o;
+        html += `<label class="choice-option${on ? ' is-selected' : ''}"${multi ? ' data-multi' : ''} for="ea-${st.id}-${i}"><input id="ea-${st.id}-${i}" type="${multi ? 'checkbox' : 'radio'}" name="ea-${st.id}" value="${esc(o)}"${on ? ' checked' : ''}><span class="choice-mark" aria-hidden="true"></span><span>${esc(o)}</span></label>`;
+      });
+      html += '</div></fieldset>';
+    }
+    html += `<p class="form-error" role="alert"${error ? '' : ' hidden'}>${esc(error)}</p>
+      <div class="form-actions">
+        <button type="button" class="pill form-back" id="ea-back"${state.step === 0 ? ' disabled' : ''}>${arrowL}Back</button>
+        <button type="submit" class="pill form-next" id="ea-next"${ready() ? '' : ' disabled'}>${last ? 'Join Early Access' : 'Next'}${arrowR}</button>
+      </div>`;
+    body.innerHTML = html;
+    if (state.opened) track('form_step_view', { step_id: st.id, step_index: state.step + 1, source: state.source }, form);
+  }
+  const open = () => {
+    if (state.opened) return;
+    state.opened = true;
+    track('form_open', { source: state.source }, form);
+    track('form_step_view', { step_id: STEPS[state.step].id, step_index: state.step + 1, source: state.source }, form);
+  };
+  form.addEventListener('focusin', open);
+  form.addEventListener('pointerdown', open);
+  form.addEventListener('change', (e) => {
+    const st = STEPS[state.step], t = e.target;
+    if (st.type === 'contact') { if (t.id === 'ea-consent') state.contact.consent = t.checked; $('#ea-next').disabled = !ready(); return; }
+    state.answers[st.id] = st.type === 'multi' ? $$(`input[name="ea-${st.id}"]:checked`, form).map((i) => i.value) : t.value;
+    $$('.choice-option', form).forEach((l) => l.classList.toggle('is-selected', l.querySelector('input').checked));
+    $('#ea-next').disabled = !ready();
+  });
+  form.addEventListener('input', (e) => {
+    if (e.target.id === 'ea-email') state.contact.email = e.target.value;
+    if (e.target.id === 'ea-country') state.contact.country = e.target.value;
+    if (STEPS[state.step].type === 'contact') $('#ea-next').disabled = !ready();
+  });
+  form.addEventListener('click', (e) => { if (e.target.closest('#ea-back') && state.step > 0) { state.step -= 1; render(); } });
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const st = STEPS[state.step];
+    if (st.type === 'contact') {
+      const msg = !emailOk() ? 'Enter an email address like name@example.com.' : !state.contact.consent ? 'Tick the box so we can email you about Early Access.' : '';
+      if (msg) { track('lead_submit_error', { reason: emailOk() ? 'no_consent' : 'invalid_email', source: state.source }, form); render(msg); return; }
+      track('form_step_complete', { step_id: st.id, step_index: state.step + 1 }, form);
+      track('lead_submit_success', { source: state.source, answers: state.answers, has_country: Boolean(state.contact.country.trim()) }, form);
+      body.innerHTML = `<div class="form-done" aria-live="polite"><p class="fine">Step ${STEPS.length} of ${STEPS.length}</p><h4>You're on the Early Access list.</h4><p>Thanks. Your answers help us decide what MOKUKU MOTO does first. We'll be in touch as it gets closer.</p></div>`;
+      return;
+    }
+    if (!ready()) return;
+    track('form_step_complete', { step_id: st.id, step_index: state.step + 1, answer: state.answers[st.id] }, form);
+    state.step += 1;
+    render();
+  });
+  $$('[data-cta="ride_together_feedback"]').forEach((a) => a.addEventListener('click', () => { state.source = 'ride_together'; }));
+  render();
+})();
+</script>
